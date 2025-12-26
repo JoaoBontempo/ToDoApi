@@ -101,6 +101,10 @@ namespace Tests.Unit.ToDos
                 FinishedAt = DateTime.Now.AddHours(-1)
             };
 
+            _repositoryMock
+                .Setup(r => r.FindById(It.IsAny<int>()))
+                .ReturnsAsync(toDo);
+
             Func<Task> act = async () => await _useCase.Execute(toDo);
 
             await act.Should()
