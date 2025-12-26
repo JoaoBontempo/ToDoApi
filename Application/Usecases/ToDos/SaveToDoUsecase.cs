@@ -18,10 +18,24 @@ namespace Application.Usecases.ToDos
             if(toDo is null)
                 throw new ApplicationException(AppMessages.ToDoValidations.TODO_IS_REQUIRED);
 
-            toDo.EnsureIsValid();
-
             if (toDo.Id == 0)
-                return await todoGateway.Insert(toDo);
+                return await InsertToDo(toDo);
+            else
+                return await UpdateTodo(toDo);
+        }
+
+        private async Task<ToDo> InsertToDo(ToDo toDo)
+        {
+            toDo.EnsureIsValid();
+            return await todoGateway.Insert(toDo);
+        }
+
+        private async Task<ToDo> UpdateTodo(ToDo toDo)
+        {
+            ToDo existingToDo = await todoGateway.FindById(toDo.Id) ?? throw new ApplicationException(AppMessages.ToDoValidations.TODO_NOT_FOUND);
+            toDo.CreatedAt = existingToDo.CreatedAt;
+
+            toDo.EnsureIsValid();
 
             ToDo? savedtoDo = await todoGateway.Update(toDo) ?? throw new ApplicationException(AppMessages.ToDoValidations.TODO_NOT_FOUND);
             return savedtoDo;

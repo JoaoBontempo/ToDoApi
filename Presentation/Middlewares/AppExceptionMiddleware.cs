@@ -64,8 +64,11 @@ namespace Presentation.Middlewares
             };
 
             context.Response.StatusCode = (int)response.StatusCode;
-            
-            var body = JsonSerializer.Serialize(response.Body);
+
+            string body = JsonSerializer.Serialize(response.Body, new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
             await context.Response.WriteAsync(body);
         }
 

@@ -11,7 +11,6 @@ using Presentation.Middlewares;
 DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
-// Adicione isso antes do build()
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
